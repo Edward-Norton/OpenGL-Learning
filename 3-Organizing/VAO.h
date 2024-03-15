@@ -5,15 +5,19 @@
 #include<glad/glad.h>
 #include"VBO.h"
 
+//----------VERTEX ARRAY OBJECT----------
+
 class VAO
 {
 public:
 	GLuint ID;
-	VAO();
+	VAO(); //Make a new Vertex array object
 
-	void linkVBO(VBO VBO, GLuint layout);
+	//Links the VBO to the VAO. 
+	/*Specifies how the data stored in the VBO should be interpreted.*/
+	void linkVBO(VBO VBO, GLuint layout); //(Vbo object to link to, layout is index to bind)
 
-	void Bind();
+	void Bind(); //Binds the VAO using glBindVertexArray.
 	void Unbind();
 	void Delete();
 };

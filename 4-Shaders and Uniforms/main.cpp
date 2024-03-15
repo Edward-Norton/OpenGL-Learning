@@ -12,13 +12,13 @@
 //----------INDICES and Vertex Buffer----------
 	//GlFloat to make an array of vertex points 
 GLfloat vertices[] =
-{	//Positions (X,Y,Z)
-	-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, //Lower left corner (0)
-	0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,  //Lower right corner (1)
-	0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, //Upper corner (2)
-	-0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, //Inner left (3)
-	0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, //Inner right (4)
-	0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner Down (5)
+{	//			COORDINATES (X,Y,Z)						/	COLORS				//	
+   -0.5f,   -0.5f * float(sqrt(3)) / 3,     0.0f,			0.8f, 0.3f,  0.02f,	// Lower left corner (0)
+	0.5f,   -0.5f * float(sqrt(3)) / 3,     0.0f,			0.8f, 0.3f,  0.02f,	// Lower right corner (1)
+	0.0f,    0.5f * float(sqrt(3)) * 2 / 3, 0.0f,			1.0f, 0.6f,  0.32f,  // Upper corner (2)
+   -0.25,    0.5f * float(sqrt(3)) / 6,		0.0f,			0.9f, 0.45f, 0.17f,	// Inner left (3)
+	0.25,    0.5f * float(sqrt(3)) / 6,     0.0f,			0.9f, 0.45f, 0.17f,	// Inner right (4)
+	0.0f,   -0.5f * float(sqrt(3)) / 3,     0.0f,			0.8f, 0.3f,  0.02f	// Inner Down (5)
 };
 
 //Using the vertex points above we make a new array to use each point to make a shape
@@ -88,13 +88,16 @@ int main()
 
 
 	//Link data
-	VAO1.linkVBO(VBO1, 0);
+	VAO1.linkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0); //Coordinates
+	VAO1.linkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3*sizeof(float)));
 
 	//----------Unbind data---------- (Needs to be in this order)
 	VAO1.Unbind();
 	VBO1.UnBind();
 	EBO1.UnBind();
 
+	//----------GL UNIFORMS----------
+	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
 
 	// Swap the back buffer with the front buffer
@@ -114,7 +117,9 @@ int main()
 		// The color buffer stores the color values of pixels.
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		shaderProgram.Activate(); //Usee this shader
+		shaderProgram.Activate(); //Use this shader
+		glUniform1f(uniID, 0.5f);
+
 		VAO1.Bind(); //Tell openGL we want to use this one
 
 		//Drawing

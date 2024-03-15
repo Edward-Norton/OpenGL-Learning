@@ -63,6 +63,11 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile)
 	glAttachShader(ID, fragmentShader);
 	glLinkProgram(ID);
 
+	//CHECK COMPILE ERRORS
+	compileErrors(vertexShader, "VERTEX");
+	compileErrors(fragmentShader, "FRAGMENT");
+	compileErrors(ID, "PROGRAM");
+
 	//Delete the shaders since they are now in the program itself
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
@@ -77,4 +82,30 @@ void Shader::Activate()
 void Shader::Delete()
 {
 	glDeleteProgram(ID);
+}
+
+
+//Check shader has compiled
+void Shader::compileErrors(unsigned int shader, const char* type)
+{
+	GLint hasCompiled;
+	char infoLog[1024];
+	if (type != "PROGRAM") //Shader check
+	{
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
+		if (hasCompiled == GL_FALSE)
+		{
+			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+			std::cout << "SHADER_COMPILATION_ERROR for: " << type << "\n" << std::endl;
+		}
+	}
+	else //Program check
+	{
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
+		if (hasCompiled == GL_FALSE)
+		{
+			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+			std::cout << "SHADER_LINKING_ERROR for: " << type << "\n" << std::endl;
+		}
+	}
 }
