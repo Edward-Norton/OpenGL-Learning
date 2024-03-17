@@ -102,7 +102,7 @@ int main()
 
 	//----------TEXTURES----------
 	TextureClass popCat("Resources/Textures/pop_cat.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	popCat.texUnit(shaderProgram, "tex0", 0);
+	popCat.textureIDUni(shaderProgram, "tex0", 0);
 
 	//Main while lopp
 	while (!glfwWindowShouldClose(window)) //Shouldnt close window
